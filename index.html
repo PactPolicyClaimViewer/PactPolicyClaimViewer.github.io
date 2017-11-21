@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      .meow {
+        background: #fff;
+      }
+
+      .meowtext {
+        text-shadow: 0 -1px 0 #000;
+        color: #f00;
+        font-family: Helvetica Neue, Helvetica, arial;
+        font-size: 40px;
+        line-height: 25px;
+        padding: 100px 50px 100px 50px;
+        font-weight: bold;
+        background: #fff;
+      }
+
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD4USr3s0E94nWWr7zktF6bXbGL0KEvYB4&callback=initMap"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/googlemaps/js-info-bubble/gh-pages/src/infobubble.js"></script>
+    <script type="text/javascript">
+      var map = null;
+
+      function createPolicyMarker(latlng) {
+        var marker = new google.maps.Marker({
+          position: latlng,
+          map: map,
+          icon: "icons/policy_active.png"
+        });
+        google.maps.event.addListener(marker, 'click', function() {});
+      }
+
+      function createClaimMarker(latlng, name, html) {
+        var contentString = html;
+        var marker = new google.maps.Marker({
+          position: latlng,
+          map: map,
+          icon: "icons/accident.png",
+          zindex: Math.round(latlng.lat()*-100000)<<5
+        });
+
+        google.maps.event.addListener(marker, 'click', function() {
+          infowindow.setContent( '<div class="meow">'+contentString+'</div>');
+          infowindow.open(map,marker);
+        });
+      }
+
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map_canvas'), {
+          zoom: 6,
+          center: new google.maps.LatLng(36.7783, -119.4179),
+          mapTypeId: 'roadmap', 
+          styles: 
+	[
+	  {
+	    "elementType": "geometry",
+	    "stylers": [
+	      {
+		"color": "#f5f5f5"
+	      }
+	    ]
+	  },
+	  {
+	    "elementType": "labels.icon",
+	    "stylers": [
+	      {
+		"visibility": "off"
+	      }
+	    ]
+	  },
+	  {
+	    "elementType": "labels.text.fill",
+	    "stylers": [
+	      {
+		"color": "#616161"
+	      }
+	    ]
+	  },
+	  {
+	    "elementType": "labels.text.stroke",
+	    "stylers": [
+	      {
+		"color": "#f5f5f5"
+	      }
+	    ]
+	  },
+	  {
+	    "featureType": "administrative.land_parcel",
+	    "elementType": "labels",
+	    "stylers": [
+	      {
+		"visibility": "off"
+	      }
+	    ]
+	  },
+	  {
+	    "featureType": "administrative.land_parcel",
+	    "elementType": "labels.text.fill",
+	    "stylers": [
+	      {
+		"color": "#bdbdbd"
+	      }
+	    ]
+	  },
+	  {
+	    "featureType": "poi",
+	    "elementType": "geometry",
+	    "stylers": [
+	      {
+		"color": "#eeeeee"
+	      }
+	    ]
+	  },
+	  {
+	    "featureType": "poi",
+	    "elementType": "labels.text",
+	    "stylers": [
+	      {
+		"visibility": "off"
+	      }
+	    ]
+	  },
+	  {
+	    "featureType": "poi",
+	    "elementType": "labels.text.fill",
+	    "stylers": [
+	      {
+		"color": "#757575"
+	      }
+	    ]
+	  },
+	  {
+	    "featureType": "poi.business",
+	    "stylers": [
+	      {
+		"visibility": "off"
+	      }
+	    ]
+	  },
+	  {
+	    "featureType": "poi.park",
+	    "elementType": "geometry",
+	    "stylers": [
+	      {
+		"color": "#e5e5e5"
+	      }
+	    ]
+	  },
+	  {
+	    "featureType": "poi.park",
+	    "elementType": "labels.text.fill",
+	    "stylers": [
+	      {
+		"color": "#9e9e9e"
+	      }
+	    ]
+	  },
+	  {
+	    "featureType": "road",
+	    "elementType": "geometry",
+	    "stylers": [
+	      {
+		"color": "#ffffff"
+	      }
+	    ]
+	  },
+	  {
+	    "featureType": "road",
+	    "elementType": "labels.icon",
+	    "stylers": [
+	      {
+		"visibility": "off"
+	      }
+	    ]
+	  },
+	  {
+	    "featureType": "road.arterial",
+	    "elementType": "labels.text.fill",
+	    "stylers": [
+	      {
+		"color": "#757575"
+	      }
+	    ]
+	  },
+	  {
+	    "featureType": "road.highway",
+	    "elementType": "geometry",
+	    "stylers": [
+	      {
+		"color": "#dadada"
+	      }
+	    ]
+	  },
+	  {
+	    "featureType": "road.highway",
+	    "elementType": "labels.text.fill",
+	    "stylers": [
+	      {
+		"color": "#616161"
+	      }
+	    ]
+	  },
+	  {
+	    "featureType": "road.local",
+	    "elementType": "labels",
+	    "stylers": [
+	      {
+		"visibility": "off"
+	      }
+	    ]
+	  },
+	  {
+	    "featureType": "road.local",
+	    "elementType": "labels.text.fill",
+	    "stylers": [
+	      {
+		"color": "#9e9e9e"
+	      }
+	    ]
+	  },
+	  {
+	    "featureType": "transit",
+	    "stylers": [
+	      {
+		"visibility": "off"
+	      }
+	    ]
+	  },
+	  {
+	    "featureType": "transit.line",
+	    "elementType": "geometry",
+	    "stylers": [
+	      {
+		"color": "#e5e5e5"
+	      }
+	    ]
+	  },
+	  {
+	    "featureType": "transit.station",
+	    "elementType": "geometry",
+	    "stylers": [
+	      {
+		"color": "#eeeeee"
+	      }
+	    ]
+	  },
+	  {
+	    "featureType": "water",
+	    "elementType": "geometry",
+	    "stylers": [
+	      {
+		"color": "#c9c9c9"
+	      }
+	    ]
+	  },
+	  {
+	    "featureType": "water",
+	    "elementType": "labels.text.fill",
+	    "stylers": [
+	      {
+		"color": "#9e9e9e"
+	      }
+	    ]
+	  }
+	]
+
+
+
+
+        });
+        
+
+        google.maps.event.addListener(map, 'click', function() {
+          infowindow.close();
+        });
+                  
+        var point = new google.maps.LatLng(40.344712, -122.425084);
+        var marker = createClaimMarker(point, "this place","<img src='imgs/accident1.png'>");
+        
+        var point = new google.maps.LatLng(35.218192, -118.751102);
+        var marker = createClaimMarker(point, "this place","<img src='imgs/accident2.png'>");
+
+        var point = new google.maps.LatLng(36.751809, -119.919506);
+        var marker = createClaimMarker(point, "this place","<img src='imgs/accident3.png'>");
+
+        var point = new google.maps.LatLng(37.001047, -122.022634);
+        var marker = createClaimMarker(point, "this place","<img src='imgs/accident4.png'>");
+
+        var point = new google.maps.LatLng(37.743867, -121.853865);
+        var marker = createClaimMarker(point, "this place","<img src='imgs/accident5.png'>");
+
+        var point = new google.maps.LatLng(38.418302, -121.607201);
+        var marker = createClaimMarker(point, "this place","<img src='imgs/accident6.png'>");
+
+        var point = new google.maps.LatLng(37.104656, -121.762989);
+        var marker = createClaimMarker(point, "this place","<img src='imgs/accident7.png'>");
+
+        var point = new google.maps.LatLng(33.091284, -116.972531);
+        var marker = createClaimMarker(point, "this place","<img src='imgs/accident8.png'>");
+
+        var point = new google.maps.LatLng(34.253711, -118.945179);
+        var marker = createClaimMarker(point, "this place","<img src='imgs/accident9.png'>");
+
+        var point = new google.maps.LatLng(34.123572, -118.095076);
+        var marker = createClaimMarker(point, "this place","<img src='imgs/accident10.png'>");
+
+        var point = new google.maps.LatLng(34.192302, -118.205010);
+        createClaimMarker(point, "this place","<img src='imgs/accident11.png'>");
+
+        var point = new google.maps.LatLng(34.170249, -118.314041);
+        createClaimMarker(point, "this place","<img src='imgs/accident12.png'>");
+
+        var point = new google.maps.LatLng(34.115532,-118215673);
+        createClaimMarker(point, "this place","<img src='imgs/accident13.png'>");
+
+        createPolicyMarker(new google.maps.LatLng(33.956525,-117.4667953));
+
+        createPolicyMarker(new google.maps.LatLng(33.7261701,-117.9284915));
+
+        createPolicyMarker(new google.maps.LatLng(37.1986529,-121.8465068));
+
+        createPolicyMarker(new google.maps.LatLng(33.7175771,-117.806504));
+
+        createPolicyMarker(new google.maps.LatLng(34.3450945,-119.0723266));
+
+        createPolicyMarker(new google.maps.LatLng(34.0612884,-117.9878547));
+
+        createPolicyMarker(new google.maps.LatLng(37.311921,-121.8706));
+
+        createPolicyMarker(new google.maps.LatLng(37.5741718,-121.9768943));
+
+        createPolicyMarker(new google.maps.LatLng(33.1494041,-117.1229886));
+
+        createPolicyMarker(new google.maps.LatLng(37.3584213,-121.9932164));
+
+        createPolicyMarker(new google.maps.LatLng(36.6648373,-121.7725376));
+
+        createPolicyMarker(new google.maps.LatLng(34.2659366,-118.7668886));
+
+        createPolicyMarker(new google.maps.LatLng(34.0297727,-118.3777458));
+
+        createPolicyMarker(new google.maps.LatLng(33.9288581,-117.9219672));
+
+        createPolicyMarker(new google.maps.LatLng(37.3543801,-122.0444571));
+
+        createPolicyMarker(new google.maps.LatLng(37.6751591,-122.0606131));
+
+        createPolicyMarker(new google.maps.LatLng(33.8022817,-117.8252175));
+
+        createPolicyMarker(new google.maps.LatLng(38.6010372,-121.3908429));
+
+        createPolicyMarker(new google.maps.LatLng(34.4553534,-118.4267038));
+
+        createPolicyMarker(new google.maps.LatLng(34.188878,-118.83513));
+
+        createPolicyMarker(new google.maps.LatLng(37.2771834,-121.912828));
+
+        createPolicyMarker(new google.maps.LatLng(33.7777457,-118.1971941));
+
+        createPolicyMarker(new google.maps.LatLng(36.1930552,-119.3261935));
+
+        createPolicyMarker(new google.maps.LatLng(32.7088188,-117.1598467));
+
+        createPolicyMarker(new google.maps.LatLng(34.1146954,-118.2883967));
+
+        createPolicyMarker(new google.maps.LatLng(37.3535821,-122.0191472));
+
+        createPolicyMarker(new google.maps.LatLng(34.0695136,-118.4165429));
+
+        createPolicyMarker(new google.maps.LatLng(33.8719338,-117.7698376));
+
+        createPolicyMarker(new google.maps.LatLng(37.2833732,-120.5023744));
+
+        createPolicyMarker(new google.maps.LatLng(34.1446712,-117.9258812));
+
+        createPolicyMarker(new google.maps.LatLng(37.6386957,-122.061612));
+        createPolicyMarker(new google.maps.LatLng(35.362687,-119.014174));
+
+        createPolicyMarker(new google.maps.LatLng(37.6664686,-122.4240194));
+
+        createPolicyMarker(new google.maps.LatLng(32.6613888,-116.949124));
+6
+        createPolicyMarker(new google.maps.LatLng(33.949085,-117.687977));
+
+        createPolicyMarker(new google.maps.LatLng(37.3685505,-120.43207));
+
+        createPolicyMarker(new google.maps.LatLng(34.0476908,-117.849554));
+3
+        createPolicyMarker(new google.maps.LatLng(36.69901,-121.6526871));
+
+        createPolicyMarker(new google.maps.LatLng(33.7720235,-118.316053));
+
+        createPolicyMarker(new google.maps.LatLng(34.0629523,-118.085636));
+
+        createPolicyMarker(new google.maps.LatLng(33.8095663,-117.4149536));
+
+        createPolicyMarker(new google.maps.LatLng(36.727077,-119.7015297));
+
+        createPolicyMarker(new google.maps.LatLng(33.9312614,-118.2161911));
+
+        createPolicyMarker(new google.maps.LatLng(32.8147548,-117.0512182));
+
+        createPolicyMarker(new google.maps.LatLng(32.7705467,-117.1916577));
+
+        createPolicyMarker(new google.maps.LatLng(38.6115477,-121.3276326));
+
+        createPolicyMarker(new google.maps.LatLng(36.0719898,-119.0049284));
+      }
+      
+      var infowindow = new InfoBubble(
+        {
+          map : map,
+          content: '<div class="meowtext">Some label</div>',
+          position: new google.maps.LatLng(36, -119),
+          shadowStyle: 1,
+          padding: 0,
+          backgroundColor: 'white',
+          borderRadius: 0,
+          arrowSize: 10,
+          borderWidth: 1,
+          borderColor: '#ccc',
+          disableAutoPan: false,
+          hideCloseButton: true,
+          arrowPosition: 30,
+          backgroundClassName: 'meow',
+          arrowStyle: 2,
+          maxWidth: 600
+        
+        });
+    </script>
+
+  </head>
+  <body onload="initMap()">
+    <div id="map_canvas" style="height:100%"></div>
+ </body>
+</html>
